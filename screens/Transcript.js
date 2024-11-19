@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View, TextInput, Alert } from 'react-native';
 import { Text, Button, useTheme } from 'react-native-paper';

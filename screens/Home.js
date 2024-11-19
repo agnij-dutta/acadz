@@ -5,6 +5,8 @@ import { TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FAB, IconButton, useTheme } from "react-native-paper";
 import AddNewDialog from "../components/AddNewDialog";
+import { auth } from '../firebase/config';
+import DatabaseService from '../services/DatabaseService';
 
 
 const EmptyContent = ({ onAdd }) => {
@@ -116,6 +118,11 @@ const HomeScreen = ({ navigation }) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
+        // Update last active timestamp when Home screen is accessed
+        if (auth.currentUser) {
+            DatabaseService.updateLastActive(auth.currentUser.uid);
+        }
+        
         loadList(currentPath);
 
         const goBack = () => {

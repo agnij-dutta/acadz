@@ -20,7 +20,8 @@
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#111111"
             },
-            "package": "com.asterisk.acadz"
+            "package": "com.asterisk.acadz",
+            "googleServicesFile": "./google-services.json"
         },
         "web": {
             "favicon": "./assets/favicon.png"

@@ -1,19 +1,20 @@
 import React, { useEffect } from "react";
-import { View, Image, StyleSheet, Alert } from "react-native";
+import { View, Image, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { Images } from "../constants/";
 import { useTheme, Button, Text, IconButton } from "react-native-paper";
+import { useAuth } from '../contexts/AuthContext';
 
 const app_info = `
 Version: 0.2.1a (alpha)
-Date: 15-10-2024
-Devs: Mohikshit Ghorai, Pritam Das, Suparno Saha
+Date: 19-11-2024
+Devs: Mohikshit Ghorai, Pritam Das, Suparno Saha, Agnij Dutta, Mainak Dasgupta
 
-Initially made for #HackSynthesis 2024 hackathon at UEM, Newton, Kolkata
 `.trim();
 
 export default function WelcomeScreen({ navigation }) {
     const theme = useTheme();
     const styles = createStyles(theme);
+    const { user, loading } = useAuth();
 
     useEffect(() => {
         navigation.setOptions({
@@ -23,7 +24,23 @@ export default function WelcomeScreen({ navigation }) {
                 iconColor={theme.colors.onPrimaryContainer}
             />)
         });
-    }, []);
+
+        // Auto-navigate based on auth state
+        if (!loading) {
+            if (user) {
+                navigation.replace('Home');
+            }
+        }
+    }, [loading, user]);
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <Image
@@ -33,7 +50,7 @@ export default function WelcomeScreen({ navigation }) {
             />
             <View style={styles.textContainer}>
                 <Text style={styles.welcomeText}>
-                    Welcome, <Text style={styles.boldText}>Student</Text>
+                    Welcome to <Text style={styles.boldText}>AcadZ</Text>
                 </Text>
             </View>
 
@@ -41,15 +58,9 @@ export default function WelcomeScreen({ navigation }) {
                 icon="chevron-right"
                 mode="outlined"
                 style={styles.button}
-                onPress={() => navigation.navigate("Home")}>
-                Continue to Dashboard
+                onPress={() => navigation.navigate("Login")}>
+                Get Started
             </Button>
-
-            <Text style={styles.infoText}>
-                This app is currently in alpha stage. All features are not available yet!{'\n\n'}
-                Any transcript/summary/flashcards etc, you add/generate are NOT saved.{'\n\n'}
-                We are sorry for the inconvenience!
-            </Text>
         </View>
     );
 }
